@@ -100,5 +100,24 @@ Implementation example :
         //! Overall performance.
         std::cout<<"performance motion planning + interpolation cycle ms:"<<mySmp->motion_calculation_duration_ms()+mySmp->interpolation_calculation_duration_ms()<<std::endl;
 
+Qt User interface :
+
+        ![screen](https://github.com/grotius-cnc/motion_tryout/blob/main/screen.jpg)
+        
+
+To make the qt project, in project dir open terminal :
+      
+        mkdir build
+        cd build
+        cmake ..
+        make
+
+
+
+
+
+
+
+
 
 
