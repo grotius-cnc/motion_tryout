@@ -20,15 +20,8 @@ public:
 
     void reset();
 
-    void setTimescale(double theScale);
-    void setAccscale(double theScale);
-    void setVelocityscale(double theScale);
-    void setDistscale(double theScale);
-
-    void setVelvec(std::vector<double> theVec);
-    void setAccvec(std::vector<double> theVec);
-    void setDistvec(std::vector<double> theVec);
-    void setTimevec(std::vector<double> theVec);
+    void setScale(double thexScale, double theyScale);
+    void setVec(std::vector<double> thexVec, std::vector<double> theyVec);
 
     void initializeGL();
     void resizeGL(int w, int h);

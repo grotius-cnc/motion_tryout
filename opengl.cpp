@@ -4,14 +4,11 @@
 #include <opengl.h>
 #include <vector>
 
-double timescale=0;
-double velocityscale=0;
-double accscale=0;
-double distscale=0;
-std::vector<double> velvec;
-std::vector<double> accvec;
-std::vector<double> distvec;
-std::vector<double> timevec;
+double xScale=0;
+double yScale=0;
+
+std::vector<double> xVec;
+std::vector<double> yVec;
 
 opengl::opengl(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -43,36 +40,14 @@ void opengl::reset(){
 
 }
 
-void opengl::setVelvec(std::vector<double> theVec){
-    velvec=theVec;
+void opengl::setVec(std::vector<double> thexVec, std::vector<double> theyVec){
+    xVec=thexVec;
+    yVec=theyVec;
 }
 
-void opengl::setAccvec(std::vector<double> theVec){
-    accvec=theVec;
-}
-
-void opengl::setDistvec(std::vector<double> theVec){
-    distvec=theVec;
-}
-
-void opengl::setTimevec(std::vector<double> theVec){
-    timevec=theVec;
-}
-
-void opengl::setTimescale(double theScale){
-    timescale=theScale;
-}
-
-void opengl::setAccscale(double theScale){
-    accscale=theScale;
-}
-
-void opengl::setVelocityscale(double theScale){
-    velocityscale=theScale;
-}
-
-void opengl::setDistscale(double theScale){
-    distscale=theScale;
+void opengl::setScale(double thexScale, double theyScale){
+    xScale=thexScale;
+    yScale=theyScale;
 }
 
 void opengl::paintGL()
@@ -87,11 +62,10 @@ void opengl::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-
     glColor4d(255,255,0,255);
     glBegin(GL_LINE_STRIP);
-    for(uint i=0; i<timevec.size(); i++){
-        glVertex2d(timevec.at(i)*timescale,this->height()-(velvec.at(i)*velocityscale));
+    for(uint i=0; i<xVec.size(); i++){
+        glVertex2d(xVec.at(i)*xScale,this->height()-(yVec.at(i)*yScale));
 
     }
     glEnd();

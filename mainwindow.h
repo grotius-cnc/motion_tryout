@@ -18,6 +18,8 @@ public:
     ~MainWindow();
 
 private slots:
+    void thread();
+
     void on_pushButton_pressed();
 
     void on_doubleSpinBox_s_valueChanged(double arg1);
@@ -30,8 +32,13 @@ private slots:
 
     void on_doubleSpinBox_vm_valueChanged(double arg1);
 
+    void on_pushButton_start_pressed();
+
+    void on_pushButton_stop_pressed();
+
 private:
     Ui::MainWindow *ui;
+    QTimer *timer;
     smp *mySmp;
     opengl *myOpenGl;
 };
