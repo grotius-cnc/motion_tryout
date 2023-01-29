@@ -57,7 +57,7 @@ Mention : During the live motion the controller stays in the first period, t1, e
 
 Qt User interface :
 
-        ![screen](https://github.com/grotius-cnc/motion_tryout/blob/main/screen.jpg)
+![screen](https://github.com/grotius-cnc/motion_tryout/blob/main/screen.jpg)
         
 
 To make the qt project, in project dir open terminal :
