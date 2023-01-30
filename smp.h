@@ -12,6 +12,7 @@ class smp
 public:
     smp(){};
 
+    //! Enum period types.
     enum period_type {
         acc,
         steady,
@@ -19,6 +20,7 @@ public:
         none
     };
 
+    //! Data structure to hold motion values.
     struct smp_data {
         //! Inputs.
         double vo=0;
@@ -34,8 +36,12 @@ public:
         double t1=0, t2=0, t3=0;
         double s1=0, s2=0, s3=0;
         period_type p1,p2,p3;
+
+        //! Function calculation time.
+        double performance_ms=0;
     };
 
+    //! Print function.
     void print(double vo, double vm, double ve, double a,
                double t1, double t2, double t3,
                double s1, double s2, double s3,
@@ -98,6 +104,7 @@ public:
         std::cout<<std::fixed<<" "<<std::endl;
     }
 
+    //! Set interpolated current velocity function.
     smp_data setVi(smp_data d, double vi, bool debug){
         d.vi=vi;
         if(debug){
@@ -106,6 +113,7 @@ public:
         return d;
     }
 
+    //! Set interpolated current displacement function.
     smp_data setSi(smp_data d, double si, bool debug){
         d.si=si;
         if(debug){
@@ -114,6 +122,7 @@ public:
         return d;
     }
 
+    //! Data wrapper function. from standard input to struct output.
     smp_data setData(double vo, double vm, double ve, double a,
                      double t1, double t2, double t3,
                      double s1, double s2, double s3,
@@ -141,10 +150,12 @@ public:
         return d;
     }
 
-    //! Calculate live motion.
-    bool calculate_live_motion(double vo, double vm, double ve, double a, double s, smp_data &d, bool interpolate, double interval, bool debug_interpolation, bool debug_standard){
+    //! Calculate live motion, online motion.
+    bool calculate_live_motion(double vo, double vm, double ve, double a, double s, smp_data &d, double interval, bool debug){
 
-        if(calculate_motion_private(vo,vm,ve,a,s,d,debug_standard)){
+        auto start = std::chrono::steady_clock::now();
+
+        if(calculate_motion_private(vo,vm,ve,a,s,d,debug)){
 
             //! For live motion, we only use period t1.
             if(d.p1==period_type::acc){
@@ -169,6 +180,14 @@ public:
                 d.si=d.s;
                 d.vi=ve;
             }
+
+            auto end = std::chrono::steady_clock::now();
+            auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+            d.performance_ms=nanoseconds_to_milliseconds(nanoseconds.count());
+            if(debug){
+                std::cout<<"function performance time ms:"<<std::fixed<<d.performance_ms<<std::endl;
+            }
+
             return 1;
         } else {
             std::cerr<<"error from function : calculate_motion"<<std::endl;
@@ -176,14 +195,15 @@ public:
         }
     }
 
+    //! From current velocity "vo" calculate distance to stop. The margin is applied to avoid a motion calcuation error.
     double dtg_to_stop(double vo, double a, double stop_margin=0.01){
         return calculate_deceleration_displacement(vo,0,a)+stop_margin;
     }
 
-    //! Calculate motion.
-    bool calculate_motion(double vo, double vm, double ve, double a, double s, smp_data &d, bool interpolate, double at_time, bool debug_interpolation, bool debug_standard){
+    //! Calculate motion offline.
+    bool calculate_motion(double vo, double vm, double ve, double a, double s, smp_data &d, double at_time, bool debug){
 
-        if(calculate_motion_private(vo,vm,ve,a,s,d,debug_standard)){
+        if(calculate_motion_private(vo,vm,ve,a,s,d,debug)){
             std::cerr<<"calculate motion ok."<<std::endl;
             return 1;
         } else {
@@ -191,25 +211,18 @@ public:
             return 0;
         }
     }
-
-
     //! Function elapsed time in milliseconds.
-    double motion_calculation_duration_ms(){
+    double nanoseconds_to_milliseconds(double nanoseconds){
         //! Convert from nano- to milliseconds.
-        return motion_calculation_duration_nanoseconds*0.000001;
-    }
-
-    //! Function elapsed time in milliseconds.
-    double interpolation_calculation_duration_ms(){
-        //! Convert from nano- to milliseconds.
-        return inperpolation_calculation_duration_nanoseconds*0.000001;
+        return nanoseconds*0.000001;
     }
 
 
 private:
-
+    //! Main algoritme to calculate offline motion.
     bool calculate_motion_private(double vo, double vm, double ve, double a, double s, smp_data &d, bool debug){
 
+        //! Local used parameters.
         double t1=0, t2=0, t3=0, s1=0, s2=0, s3=0;
         period_type p1, p2, p3;
         p1=period_type::none;
@@ -236,7 +249,6 @@ private:
         }
         //! Three periods, t1,t2,t3.
         if(calculate_if_two_acceleration_deceleration_period_fits_displacement(vo,vm,ve,a,s)){
-
             if(calculate_acceleration_deceleration_time(vo,vm,a,t1,p1)){
                 if(calculate_acceleration_deceleration_displacment(vo,vm,a,s1)){
                     if(calculate_acceleration_deceleration_time(vm,ve,a,t3,p3)){
@@ -260,9 +272,7 @@ private:
         return 0;
     }
 
-    double motion_calculation_duration_nanoseconds=0;
-    double inperpolation_calculation_duration_nanoseconds=0;
-
+    //! Funcion to sample motion. Sample "vm" velocity max to fit curve.
     bool calculate_sampled_vm_periods(double vo,double &vm,double ve,double a, double s,
                                       double &t1, double &t2, double &t3,
                                       double &s1, double &s2, double &s3,
@@ -303,7 +313,6 @@ private:
 
         //! Sample up.
         if(vo>vm && ve>vm){
-
             while(1){
                 if(!calculate_acceleration_deceleration_time(vo,vms,a,t1,p1)){
                     return 0;
@@ -337,7 +346,7 @@ private:
         }
         return 0;
     }
-
+    //! Calculate time by reference for acceleration, deceleration given "vo" velocity begin and "ve" velocity end. Use positive input for a.
     bool calculate_acceleration_deceleration_time(double vo, double ve, double a, double &t, period_type &p){
         if(vo<ve){
             t=calculate_acceleration_time(vo,ve,a);
@@ -357,35 +366,34 @@ private:
         std::cerr<<"error from function: calculate_acceleration_deceleration_time"<<std::endl;
         return 0;
     }
-
+    //! Calculate time for acceleration, deceleration given "vo" velocity begin and "ve" velocity end. Use positive input for a.
     double calculate_acceleration_time(double vo, double ve, double a) {
         if(a == 0) {
-            // if(in.debug_functions_and_motion_periods){std::cout << "Acceleration value cannot be zero\n";}
+            std::cout<<"Acceleration value cannot be zero"<<std::endl;
             return NAN;
         }
         if(a < 0){
-            // if(in.debug_functions_and_motion_periods){std::cout << "Use a positive acceleration value" << std::endl;}
+            std::cout<<"Use a positive acceleration value"<<std::endl;
             return NAN;
         }
         if(ve <= vo) {
-            // if(in.debug_functions_and_motion_periods){std::cout << "Final velocity must be greater than initial velocity\n";}
+            std::cout<<"Final velocity must be greater than initial velocity"<<std::endl;
             return NAN;
         }
-
         return (ve - vo) / a;
     }
-
+    //! Calculate displacement "s", given "vo" velocity begin, "ve" velocity end, Use positive value for a.
     double calculate_acceleration_displacement(double vo, double ve, double a) {
         if(a == 0) {
-            // if(in.debug_functions_and_motion_periods){std::cout << "Acceleration value cannot be zero\n";}
+            std::cout<<"Acceleration value cannot be zero."<<std::endl;
             return NAN;
         }
         if(a < 0){
-            // if(in.debug_functions_and_motion_periods){std::cout << "Use a positive acceleration value" << std::endl;}
+            std::cout<<"Use a positive acceleration value."<<std::endl;
             return NAN;
         }
         if(ve < vo) {
-            // if(in.debug_functions_and_motion_periods){std::cout << "Final velocity must be greater than initial velocity\n";}
+            std::cout<<"Final velocity must be greater than initial velocity."<<std::endl;
             return NAN;
         }
         if(ve == vo) {
@@ -393,7 +401,7 @@ private:
         }
         return (ve*ve - vo*vo)/(2*a);
     }
-
+    //! Calculate displacement "s" by reference, given "vo" velocity begin, "ve" velocity end, Use positive value for a.
     bool calculate_acceleration_deceleration_displacment(double vo, double ve, double a, double &s){
         if(vo<ve){
             s=calculate_acceleration_displacement(vo,ve,a);
@@ -407,20 +415,21 @@ private:
             s=0;
             return 1;
         }
+        std::cerr<<"Error from function : calculate_acceleration_deceleration_displacment."<<std::endl;
         return 0;
     }
-
+    //! Calculate deceleration displacmenent "s". Use positive value for a.
     double calculate_deceleration_displacement(double vo, double ve, double a) {
         if(a == 0) {
-            std::cout << "Acceleration value cannot be zero\n";
+            std::cout<<"Acceleration value cannot be zero."<<std::endl;
             return NAN;
         }
         if(a < 0){
-            std::cout << "Use a positive acceleration value" << std::endl;
+            std::cout<<"Use a positive acceleration value."<<std::endl;
             return NAN;
         }
         if(vo < ve) {
-            std::cout << "Final velocity must be less than initial velocity\n";
+            std::cout<<"Final velocity must be less than initial velocity."<<std::endl;
             return NAN;
         }
         if(vo == ve) {
@@ -428,9 +437,8 @@ private:
         }
         return (vo*vo - ve*ve)/(2*a);
     }
-
+    //! Calculate current velocity or interpolated velocity "vi" by reference at time stampe "at_time", given "vo" velocity begin, "ve" velocity end, use positive value for a.
     bool calculate_acceleration_deceleration_velocity_at_time(double vo, double ve, double &vi, double a, double at_time){
-
         if(vo<ve){
             vi=calculate_acceleration_velocity_end(vo,at_time,a);
             return 1;
@@ -443,67 +451,67 @@ private:
             vi=vo;
             return 1;
         }
+        std::cerr<<"Error from function : calculate_acceleration_deceleration_velocity_at_time."<<std::endl;
         return 0;
     }
-
+    //! Calculate time for deceleration period given "vo" velocity begin, "ve" velocity end, "a" acceleration, use positive value for a.
     double calculate_deceleration_time(double vo, double ve, double a) {
         if(a == 0) {
-            //if(in.debug_functions_and_motion_periods){std::cout << "Acceleration value cannot be zero" << std::endl;}
+            std::cout<<"Acceleration value cannot be zero."<<std::endl;
             return NAN;
         }
         if(a < 0){
-            //if(in.debug_functions_and_motion_periods){std::cout << "Use a positive acceleration value" << std::endl;}
+            std::cout<<"Use a positive acceleration value."<<std::endl;
             return NAN;
         }
         if(ve > vo) {
-            //if(in.debug_functions_and_motion_periods){std::cout << "Final velocity must be less than or equal to initial velocity" << std::endl;}
+            std::cout<<"Final velocity must be less than or equal to initial velocity."<<std::endl;
             return NAN;
         }
-
         return (vo - ve) / a;
     }
-
+    //! Calculate time for steady period by reference given "v" velocity, "s" displacement. Return period_type::steady by reference.
     bool calculate_steady_time(double v, double s, double &t, period_type &p) {
         if(v==0){
-            std::cerr<<"error from function : calculate_steady_time, v=0"<<std::endl;
+            std::cerr<<"error from function : calculate_steady_time, v=0."<<std::endl;
             return 0;
         }
         t=s/v;
         p=period_type::steady;
         return 1;
     }
-
+    //! Calculate "si" interpolated displacement by reference for a steady period, given "v" velocity, "t" duration.
     bool calculate_steady_displacement(double v, double t, double &si) {
         si=v*t;
         return 1;
     }
-
+    //! Calculate "s" displacement during steady period given "v" velocity, "t" duration.
     double calculate_steady_displacement(double v, double t) {
         return v*t;
     }
-
+    //! Calculate acceleration time for a given displacement "s" given "vo" velocity begin, "a" acceleration, "s" displacement. Use positive value for a.
     double calculate_acceleration_time_for_displacement(double vo, double a, double s) {
         return (sqrt(vo*vo + 2*a*s) - vo)/a;
     }
-
+    //! Calculate deceleration time for a given displacement "s" given "vo" velocity begin, "a" acceleration, "s" displacement. Use positive value for a.
     double calculate_deceleration_time_for_displacement(double vo, double a, double s) {
         if(a>0){
             a=-abs(a);
         }
         return (vo - sqrt(vo*vo + 2*a*s))/-a;
     }
-
+    //! Calculate velocity end "ve" for acceleration period given "vo" velocity begin, "t" duration, "a" acceleration. Use positive valut for a.
     double calculate_acceleration_velocity_end(double vo, double t, double a){
         return vo + a*t;
     }
-
+    //! Calculate velocity end "ve" for deceleration period given "vo" velocity begin, "t" duration, "a" acceleration. Use positive valut for a.
     double calculate_deceleration_velocity_end(double vo, double t, double a){
         if(a>0){
             a=-abs(a);
         }
         return vo + a*t;
     }
-
+    //! Calculate if the motion from velcocity begin "vo" to velocity end "ve" fits into or equel the given displacment "s". "a" is acceleration. Use positive value for a.
     bool calculate_if_one_acceleration_deceleration_period_fits_displacement(double vo, double ve, double a, double s){
         double s1=0;
         if(vo==ve){
@@ -520,7 +528,8 @@ private:
         }
         return true;
     }
-
+    //! Calculate if the motion from velcocity begin "vo" to velocity max "vm" and the motion from "vm" to "ve" velocity end fits into or equal to displacment "s".
+    //! "a" is acceleration, use positive value for a.
     bool calculate_if_two_acceleration_deceleration_period_fits_displacement(double vo, double vm, double ve, double a, double s){
         double s1=0;
         double s2=0;
@@ -555,7 +564,7 @@ private:
         }
         return true;
     }
-
+    //! Calculate velocity end "ve" by reference given "vo" velocity begin, "a" acceleration, "s" displacement. Use positive value for a.
     bool calculate_custom_ve(double vo, double &ve, double a, double s){
         double t=0;
         if(vo<ve){
@@ -574,8 +583,7 @@ private:
         }
         return 0;
     }
-
-    //! Function to check if above function output is correct.
+    //! Function to check the output off a previous functions.
     void check_private_functions(){
         double vo=0;
         double ve=0;
@@ -625,4 +633,4 @@ private:
     }
 };
 
-#endif // SMP_H
+#endif
