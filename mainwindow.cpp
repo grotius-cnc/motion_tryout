@@ -18,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
     //! Simple motion planner class.
     mySmp=new smp();
 
+    //! Simple curve planner class.
+    myScp=new scp();
+
     //! Startup calculation.
     on_pushButton_pressed();
 
@@ -44,6 +47,21 @@ double position=0;          //! Overall position.
 bool go=0;
 bool start=0, stop=0, stop_init=0;
 bool reverse=0;
+
+//! Parameters used by the scurve live motion planner.
+bool sc_go=0;
+double sc_vo=10;             //! Velocity begin.
+double sc_ve=0;            //! Velocity end.
+double sc_a=2;              //! Acceleration.
+double sc_ai=0;             //! Acceleration interpolated, current.
+double sc_vi=0;             //! Velocity interpolated.
+double sc_ti=0;             //! Time interpolated.
+double sc_si=0;             //! Displacment interpolated.
+double sc_init=0;           //! Init motion block.
+double sc_ttot=0;           //! Time of motion block.
+double sc_stot=0;           //! Total displacment of motion block.
+double sc_th=0;             //! Ttot * 0.5
+double sc_jm=0;             //! Jm of current motion block.
 
 //! Live motion planner start button.
 void MainWindow::on_pushButton_start_pressed()
@@ -74,6 +92,24 @@ void MainWindow::on_pushButton_stop_pressed()
 
 //! This function simulates the servo cycle. And is called every 1 millisecond.
 void MainWindow::thread(){
+
+    if(sc_go){
+        if(!sc_init){
+            myScp->calculate_scurve_total_s_t_jm(sc_vo,sc_ve,sc_a,sc_stot,sc_ttot,sc_jm);
+            std::cout<<"ttot"<<sc_ttot<<std::endl;
+            sc_init=1;
+        }
+
+        if(!myScp->calculate_dcc_curve_s_v_a_given_time_point(sc_vo,sc_ve,sc_a,sc_ti,sc_si,sc_vi,sc_ai)){
+            std::cerr<<"error."<<std::endl;
+        }
+        myScp->print(sc_si,sc_vi,sc_ai,sc_ti);
+
+        if(sc_ti<=sc_ttot){
+            sc_ti+=0.001;
+        }
+    }
+
     //! Perform a stop sequence.
     if(stop){
         //! Function to calculate distance needed to stop motion.
@@ -113,7 +149,7 @@ void MainWindow::thread(){
         } else {
             //! Reset flag.
             start=0;
-            std::cerr<<"error from function calculate live motion."<<std::endl;    
+            std::cerr<<"error from function calculate live motion."<<std::endl;
         }
     }
 }
@@ -169,6 +205,24 @@ void MainWindow::on_doubleSpinBox_vm_valueChanged(double arg1)
 {
     on_pushButton_pressed();
 }
+
+
+void MainWindow::on_pushButton_scurve_pressed()
+{
+    sc_go=true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

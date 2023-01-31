@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>829</width>
-    <height>403</height>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,39 +22,6 @@ color: rgb(255, 255, 255);
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="2" column="0">
-       <widget class="QLabel" name="label">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="statusTip">
-         <string/>
-        </property>
-        <property name="text">
-         <string>vm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>s</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="2">
        <widget class="QLabel" name="label_2">
         <property name="maximumSize">
@@ -63,111 +30,6 @@ color: rgb(255, 255, 255);
           <height>16777215</height>
          </size>
         </property>
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>mm/s</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLabel" name="label_4">
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>mm/s^2</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_ve">
-        <property name="maximum">
-         <double>10000.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="stepType">
-         <enum>QAbstractSpinBox::DefaultStepType</enum>
-        </property>
-        <property name="value">
-         <double>0.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2">
-       <widget class="QLabel" name="label_10">
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="label_13">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Inputs :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QLabel" name="label_8">
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>mm/s</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_vm">
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="maximum">
-         <double>10000.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>5.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>vo</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QLabel" name="label_7">
         <property name="font">
          <font>
           <italic>true</italic>
@@ -194,6 +56,64 @@ color: rgb(255, 255, 255);
         </property>
        </widget>
       </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="statusTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>vm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_interval">
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="singleStep">
+         <double>0.001000000000000</double>
+        </property>
+        <property name="value">
+         <double>0.001000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLabel" name="label_10">
+        <property name="font">
+         <font>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>mm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="font">
+         <font>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>vo</string>
+        </property>
+       </widget>
+      </item>
       <item row="4" column="1">
        <widget class="QDoubleSpinBox" name="doubleSpinBox_vo">
         <property name="maximum">
@@ -210,28 +130,27 @@ color: rgb(255, 255, 255);
         </property>
        </widget>
       </item>
-      <item row="10" column="0">
-       <spacer name="verticalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_6">
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_9">
         <property name="font">
          <font>
           <italic>true</italic>
          </font>
         </property>
         <property name="text">
-         <string>ve</string>
+         <string>s</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_12">
+        <property name="font">
+         <font>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>s</string>
         </property>
        </widget>
       </item>
@@ -251,6 +170,123 @@ color: rgb(255, 255, 255);
         </property>
        </widget>
       </item>
+      <item row="5" column="2">
+       <widget class="QLabel" name="label_8">
+        <property name="font">
+         <font>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>mm/s</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="font">
+         <font>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>ve</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_ve">
+        <property name="maximum">
+         <double>10000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="stepType">
+         <enum>QAbstractSpinBox::DefaultStepType</enum>
+        </property>
+        <property name="value">
+         <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0">
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLabel" name="label_7">
+        <property name="font">
+         <font>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>mm/s</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" colspan="2">
+       <widget class="QLabel" name="label_14">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Live motion</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>Scurve </string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLabel" name="label_4">
+        <property name="font">
+         <font>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>mm/s^2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QPushButton" name="pushButton_start">
+        <property name="text">
+         <string>start</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="label_13">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Inputs :</string>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_3">
         <property name="font">
@@ -260,38 +296,6 @@ color: rgb(255, 255, 255);
         </property>
         <property name="text">
          <string>a</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_12">
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>s</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0" colspan="3">
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Calculate motion</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_interval">
-        <property name="decimals">
-         <number>3</number>
-        </property>
-        <property name="singleStep">
-         <double>0.001000000000000</double>
-        </property>
-        <property name="value">
-         <double>0.001000000000000</double>
         </property>
        </widget>
       </item>
@@ -313,6 +317,29 @@ color: rgb(255, 255, 255);
         </property>
        </widget>
       </item>
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_vm">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <double>10000.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>5.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0" colspan="3">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Calculate motion</string>
+        </property>
+       </widget>
+      </item>
       <item row="9" column="1">
        <widget class="QPushButton" name="pushButton_stop">
         <property name="text">
@@ -320,23 +347,10 @@ color: rgb(255, 255, 255);
         </property>
        </widget>
       </item>
-      <item row="9" column="0">
-       <widget class="QPushButton" name="pushButton_start">
+      <item row="11" column="0">
+       <widget class="QPushButton" name="pushButton_scurve">
         <property name="text">
-         <string>start</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0" colspan="2">
-       <widget class="QLabel" name="label_14">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Live motion</string>
+         <string>check</string>
         </property>
        </widget>
       </item>

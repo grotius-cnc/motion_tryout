@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <opengl.h>
 #include <smp.h>
+#include <scp.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,10 +37,13 @@ private slots:
 
     void on_pushButton_stop_pressed();
 
+    void on_pushButton_scurve_pressed();
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer;
     smp *mySmp;
+    scp *myScp;
     opengl *myOpenGl;
 };
 #endif // MAINWINDOW_H
