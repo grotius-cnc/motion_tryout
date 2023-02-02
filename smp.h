@@ -201,7 +201,7 @@ public:
     }
 
     //! Calculate motion offline.
-    bool calculate_motion(double vo, double vm, double ve, double a, double s, smp_data &d, double at_time, bool debug){
+    bool calculate_offline_motion(double vo, double vm, double ve, double a, double s, smp_data &d, bool debug){
 
         if(calculate_motion_private(vo,vm,ve,a,s,d,debug)){
             std::cerr<<"calculate motion ok."<<std::endl;
@@ -217,9 +217,8 @@ public:
         return nanoseconds*0.000001;
     }
 
-
 private:
-    //! Main algoritme to calculate offline motion.
+    //! Main algoritme to calculate offline motion for trapezium motion blocks.
     bool calculate_motion_private(double vo, double vm, double ve, double a, double s, smp_data &d, bool debug){
 
         //! Local used parameters.
@@ -272,6 +271,7 @@ private:
         return 0;
     }
 
+public:
     //! Funcion to sample motion. Sample "vm" velocity max to fit curve.
     bool calculate_sampled_vm_periods(double vo,double &vm,double ve,double a, double s,
                                       double &t1, double &t2, double &t3,

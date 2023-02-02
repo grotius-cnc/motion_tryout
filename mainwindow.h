@@ -39,6 +39,14 @@ private slots:
 
     void on_pushButton_scurve_pressed();
 
+    void on_pushButton_calculate_scurve_motion_pressed();
+
+    void on_pushButton_scurve_live_motion_pressed();
+
+    void on_pushButton_interupt_pressed();
+
+    void on_pushButton_acs_ace_pressed();
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer;

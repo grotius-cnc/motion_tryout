@@ -7,8 +7,7 @@
 double xScale=0;
 double yScale=0;
 
-std::vector<double> xVec;
-std::vector<double> yVec;
+std::vector<double> x1Vec, y1Vec, x2Vec, y2Vec;
 
 opengl::opengl(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -40,9 +39,14 @@ void opengl::reset(){
 
 }
 
-void opengl::setVec(std::vector<double> thexVec, std::vector<double> theyVec){
-    xVec=thexVec;
-    yVec=theyVec;
+void opengl::set1Vec(std::vector<double> thexVec, std::vector<double> theyVec){
+    x1Vec=thexVec;
+    y1Vec=theyVec;
+}
+
+void opengl::set2Vec(std::vector<double> thexVec, std::vector<double> theyVec){
+    x2Vec=thexVec;
+    y2Vec=theyVec;
 }
 
 void opengl::setScale(double thexScale, double theyScale){
@@ -62,10 +66,19 @@ void opengl::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glColor4d(255,255,0,255);
+    glColor4d(5,5,5,50);
     glBegin(GL_LINE_STRIP);
-    for(uint i=0; i<xVec.size(); i++){
-        glVertex2d(xVec.at(i)*xScale,this->height()-(yVec.at(i)*yScale));
+    glLineWidth(1);
+    for(uint i=0; i<x1Vec.size(); i++){
+        glVertex2d(x1Vec.at(i)*xScale,this->height()-(y1Vec.at(i)*yScale)-50);
+
+    }
+    glEnd();
+
+    glColor4d(255,0,0,255);
+    glBegin(GL_LINE_STRIP);
+    for(uint i=0; i<x2Vec.size(); i++){
+        glVertex2d(x2Vec.at(i)*xScale,this->height()-(y2Vec.at(i)*yScale)); // add 5 to avoid double lines.
 
     }
     glEnd();

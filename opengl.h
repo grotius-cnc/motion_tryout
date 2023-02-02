@@ -21,8 +21,8 @@ public:
     void reset();
 
     void setScale(double thexScale, double theyScale);
-    void setVec(std::vector<double> thexVec, std::vector<double> theyVec);
-
+    void set1Vec(std::vector<double> thexVec, std::vector<double> theyVec);
+    void set2Vec(std::vector<double> thexVec, std::vector<double> theyVec);
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
